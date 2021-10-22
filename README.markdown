@@ -9,7 +9,39 @@ those in `ansi-term-colors.txt` for best results.
 
 This script is [vimscript #2555][vimscript] at Vim.org.
 
+Jellybeans has also been ported to other editors and programs,
+listed on the [Ports wiki page][wiki-ports].
+
 Scroll down for [screenshots][ss-anchor]!
+
+[wiki-ports]: https://github.com/nanotech/jellybeans.vim/wiki/Ports
+
+## Installation
+
+Install the color scheme by adding it to your `~/.vim/colors` directory
+
+```bash
+mkdir -p ~/.vim/colors
+cd ~/.vim/colors
+curl -O https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim
+```
+
+Jellybeans can also be installed through plugin managers such as
+[dein.vim][dein], [Pathogen][pathogen], [VAM][vam],
+[vim-plug][vim-plug], [Vundle][vundle], etc.
+
+To enable the jellybeans color scheme, use 
+```
+:colorscheme jellybeans
+```
+
+If you are satisfied, you can add `colorscheme jellybeans` to your `~/.vimrc` file (`_vimrc` in Windows).
+
+[dein]: https://github.com/Shougo/dein.vim
+[pathogen]: https://github.com/tpope/vim-pathogen
+[vam]: https://github.com/MarcWeber/vim-addon-manager
+[vim-plug]: https://github.com/junegunn/vim-plug
+[vundle]: https://github.com/VundleVim/Vundle.vim
 
 ## Options
 
@@ -57,11 +89,48 @@ before 1.6.
 If you would prefer to use your terminal's default background
 (e.g. for transparent backgrounds, image backgrounds, or a
 different color) instead of the background color that Jellybeans
-applies, use this `background` override:
+applies, use this `background` override code:
 
     let g:jellybeans_overrides = {
     \    'background': { 'ctermbg': 'none', '256ctermbg': 'none' },
     \}
+    if has('termguicolors') && &termguicolors
+        let g:jellybeans_overrides['background']['guibg'] = 'none'
+    endif
+
+#### `MatchParen` Colors
+
+Jellybeans sets alternate `MatchParen` colors (magenta on black)
+in some terminals to be more readable out of the box:
+
+- Apple's Terminal.app has default themes with cursor colors
+  that are too close in brightness to Jellybeans' preferred
+  `MatchParen` background color of `#556779` to be
+  clearly distinguishable.
+- Default 16-color terminal palettes don't typically have a
+  color available that can approximate the preferred
+  `MatchParen` background color.
+
+If you use Terminal.app with a brighter cursor color, you can
+use the standard `MatchParen` colors with this override:
+
+    let g:jellybeans_overrides = {
+    \    'MatchParen': { 'guifg': 'ffffff', 'guibg': '556779' },
+    \}
+
+To use the standard `MatchParen` colors in a 16-color terminal,
+configure Low-Color Black as [described in the section
+below](#low-color-black-16-and-8-color-terminals).
+
+If you prefer the alternate `MatchParen` colors, you can use them
+everywhere with
+
+    let g:jellybeans_overrides = {
+    \    'MatchParen': { 'guifg': 'dd0093', 'guibg': '000000',
+    \                    'ctermfg': 'Magenta', 'ctermbg': '' },
+    \}
+
+*Added in version 1.7.*
 
 ### Italics
 
@@ -81,29 +150,30 @@ If you don't want italics even in GUI Vim, add
 ### Low-Color Black (16 and 8 color terminals)
 
 Since the background on a dark terminal is usually black already,
-Jellybeans appropriates the black ANSI color as a dark grey and
-uses no color when it really wants black.
+Jellybeans can appropriate the black ANSI color as a dark grey and
+use no color when it really wants black.
 
-If you can’t or don’t want to change your terminal’s color
-mappings, add
+After changing your terminal’s color palette (`#444444` is
+suggested), add this to your .vimrc:
 
-    let g:jellybeans_use_lowcolor_black = 0
+    let g:jellybeans_use_lowcolor_black = 1
 
-to your .vimrc to render “black” text as Vim’s grey (ANSI white).
-
-Users of Apple’s pre-10.7 Terminal.app can use the TerminalColours
-plugin ([Leopard][tc-leopard], [Snow Leopard][tc-snowleopard]) to
-change the default colors.
+*This option was changed to be disabled by default in version 1.7.*
 
 ## Screenshots
 
 ![][preview-ss]
 
+The font in the screenshot is 10pt [Monaco][monaco]:
+
+```vim
+set guifont=Monaco:h10 noanti
+```
+
 
 [ir_black]: https://web.archive.org/web/20140211124943/http://toddwerth.com/2008/01/25/a-black-os-x-leopard-terminal-theme-that-is-actually-readable/
 [twilight]: http://www.vim.org/scripts/script.php?script_id=1677
 [vimscript]: http://www.vim.org/scripts/script.php?script_id=2555
-[tc-leopard]: http://ciaranwal.sh/2007/11/01/customising-colours-in-leopard-terminal
-[tc-snowleopard]: https://github.com/timmfin/terminalcolours
 [preview-ss]: https://nanotech.nanotechcorp.net/downloads/jellybeans-preview.png
 [ss-anchor]: #screenshots
+[monaco]: https://en.wikipedia.org/wiki/Monaco_(typeface)
